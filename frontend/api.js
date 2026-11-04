@@ -5,9 +5,7 @@
 
 const StreakApi = (() => {
   const DEFAULT_CONFIG = {
-    apiUrl: window.location.origin.includes("http") && !window.location.origin.includes("file") 
-      ? (window.location.port === "3000" ? window.location.origin : "http://localhost:3000")
-      : "http://localhost:3000",
+    apiUrl: "https://cek85tv09l.execute-api.ap-southeast-2.amazonaws.com/dev",
     apiKey: "streaknudge-secret-key-12345",
     user: "student_demo",
     email: "student@example.com"

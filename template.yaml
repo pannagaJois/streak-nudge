@@ -32,7 +32,7 @@ Globals:
     Environment:
       Variables:
         TABLE_NAME: !Ref StreakTable
-        API_KEY: !Ref StreakApiKeyParameter
+        API_KEY: !Ref ApiKeyParam
         ENVIRONMENT: !Ref Environment
 
 Resources:
@@ -131,7 +131,6 @@ Resources:
         AllowHeaders:
           - Content-Type
           - x-api-key
-          - X-Api-Key
         AllowOrigins:
           - "*"
       DefaultRouteSettings:
