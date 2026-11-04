@@ -24,60 +24,60 @@
 
 ```mermaid
 flowchart TD
-    subgraph ClientLayer["Client & Developer Layer"]
+    subgraph ClientLayer["Client and Developer Layer"]
         User["DSA Student / Client"]
         Script["demo.sh Script / cURL"]
     end
 
-    subgraph APILayer["API Gateway (HTTP API v2)"]
-        ApiGw["StreakHttpApi<br/><i>Stage Throttling: 10 req/s, 20 burst</i>"]
-        SSM["SSM Parameter Store<br/><code>/streaknudge/{env}/api-key</code>"]
+    subgraph APILayer["API Gateway HTTP API v2"]
+        ApiGw["StreakHttpApi - Throttled: 10 req/s, 20 burst"]
+        SSM["SSM Parameter Store - /streaknudge/env/api-key"]
     end
 
     subgraph ComputeLayer["AWS Lambda (Python 3.12)"]
-        LogSolve["LogSolve Lambda<br/><code>POST /solves</code>"]
-        GetStreak["GetStreak Lambda<br/><code>GET /streak/{user}</code>"]
-        Nudge["Nudge Lambda<br/><code>EventBridge Trigger</code>"]
+        LogSolve["LogSolve Lambda (POST /solves)"]
+        GetStreak["GetStreak Lambda (GET /streak/:user)"]
+        Nudge["Nudge Lambda (EventBridge Scheduled)"]
     end
 
     subgraph StorageLayer["Amazon DynamoDB (On-Demand)"]
-        DynamoTable[("StreakTable<br/>PK=user, SK=date | PROFILE<br/><i>PAY_PER_REQUEST</i>")]
+        DynamoTable[("StreakTable - PK=user, SK=date or PROFILE")]
     end
 
     subgraph SchedulingLayer["Event-Driven Scheduling"]
-        Cron["Amazon EventBridge Rule<br/><code>cron(30 15 * * ? *)</code><br/><i>Daily 9:00 PM IST (15:30 UTC)</i>"]
+        Cron["Amazon EventBridge Rule - cron 9:00 PM IST"]
     end
 
     subgraph MessagingLayer["Amazon SNS (Pub/Sub)"]
-        SnsTopic["StreakNudgeTopic<br/><code>streaknudge-alerts-{env}</code>"]
-        EmailSub["Student Email Subscriber<br/><code>NotificationEmail</code>"]
+        SnsTopic["StreakNudgeTopic - streaknudge-alerts-env"]
+        EmailSub["Student Email Subscriber"]
     end
 
     subgraph ObservabilityLayer["Amazon CloudWatch"]
-        CWLogs["CloudWatch Log Groups<br/><i>14-day Retention</i>"]
-        Dashboard["CloudWatch Dashboard<br/><i>Invocations, Errors, Latency, RCU/WCU</i>"]
-        Alarm["Metric Math Alarm<br/><code>e1 + e2 + e3 >= 1</code>"]
+        CWLogs["CloudWatch Log Groups (14-day Retention)"]
+        Dashboard["CloudWatch Dashboard"]
+        Alarm["Metric Math Alarm (Errors >= 1)"]
     end
 
     %% API Interactions
-    User -->|POST /solves| ApiGw
-    Script -->|GET /streak/{user}| ApiGw
-    ApiGw -.->|Check x-api-key| SSM
-    ApiGw -->|Proxy Integration| LogSolve
-    ApiGw -->|Proxy Integration| GetStreak
+    User -->|"POST /solves"| ApiGw
+    Script -->|"GET /streak/:user"| ApiGw
+    ApiGw -.->|"Validate API Key"| SSM
+    ApiGw -->|"Proxy Integration"| LogSolve
+    ApiGw -->|"Proxy Integration"| GetStreak
 
     %% Compute to Storage
-    LogSolve -->|GetItem + PutItem| DynamoTable
-    GetStreak -->|Query + GetItem| DynamoTable
+    LogSolve -->|"GetItem + PutItem"| DynamoTable
+    GetStreak -->|"Query + GetItem"| DynamoTable
 
     %% Scheduling & Nudge
-    Cron -->|Scheduled Trigger| Nudge
-    Nudge -->|Scan PROFILE + GetItem| DynamoTable
-    Nudge -->|sns:Publish Reminder| SnsTopic
+    Cron -->|"Scheduled Trigger 9 PM IST"| Nudge
+    Nudge -->|"Scan PROFILE + GetItem"| DynamoTable
+    Nudge -->|"Publish Reminder"| SnsTopic
 
     %% Notifications & Alarms
     SnsTopic --> EmailSub
-    Alarm -->|sns:Publish on Error| SnsTopic
+    Alarm -->|"Publish on Error"| SnsTopic
 
     %% Logging & Monitoring
     LogSolve -.-> CWLogs
