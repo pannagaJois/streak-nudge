@@ -1,0 +1,28 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Pytest / Test Artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# AWS SAM build artifacts
+.aws-sam/
+samconfig.toml
+
+# IDE & OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

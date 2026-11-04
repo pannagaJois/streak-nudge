@@ -1,0 +1,535 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  StreakNudge - Serverless DSA/NeetCode streak tracker with daily nudge
+  Course: BIS505 Cloud Computing Mini-Project
+  AWS Free Tier Compliant | Python 3.12 Lambdas | DynamoDB Single-Table | CloudWatch Monitoring
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+    Description: Deployment environment stage name
+
+  NotificationEmail:
+    Type: String
+    Default: student@example.com
+    Description: Email address for SNS streak nudge and CloudWatch alarm alerts
+
+  ApiKeyParam:
+    Type: String
+    Default: "streaknudge-secret-key-12345"
+    NoEcho: true
+    Description: Pre-shared key for x-api-key header authentication stored in SSM Parameter Store
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 10
+    MemorySize: 128 # Minimum memory allocation to minimize cost; well within Lambda Free Tier (1M req, 3.2M sec/mo)
+    Tracing: Disabled
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref StreakTable
+        API_KEY: !Ref StreakApiKeyParameter
+        ENVIRONMENT: !Ref Environment
+
+Resources:
+  # ============================================================================
+  # SECURITY & SECRETS: SSM PARAMETER STORE
+  # Cloud Concept: Externalized Configuration & Secret Decoupling
+  # Storing the API Key in AWS Systems Manager (SSM) Parameter Store prevents
+  # hardcoding secrets into source repositories and allows rotation without code redeploys.
+  # ============================================================================
+  StreakApiKeyParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "/streaknudge/${Environment}/api-key"
+      Type: String
+      Value: !Ref ApiKeyParam
+      Description: "API Key for StreakNudge authentication"
+      Tags:
+        Project: StreakNudge
+        Course: BIS505
+
+  # ============================================================================
+  # DYNAMODB SINGLE-TABLE DESIGN
+  # Cloud Concepts:
+  # - Single-Table Architecture: Colocates user profiles (SK="PROFILE") and
+  #   daily solve logs (SK="YYYY-MM-DD") in one physical table.
+  # - On-Demand Billing (PAY_PER_REQUEST): 100% idle cost savings, zero capacity
+  #   planning required; falls under AWS Free Tier (25 GB, 25 WCU, 25 RCU).
+  # ============================================================================
+  StreakTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "streaknudge-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - Key: Project
+          Value: StreakNudge
+        - Key: Course
+          Value: BIS505
+
+  # ============================================================================
+  # NOTIFICATION SYSTEM: AMAZON SNS
+  # Cloud Concept: Publish/Subscribe (Pub/Sub) Messaging
+  # SNS decouples alert producers (Nudge Lambda / CloudWatch Alarms) from alert
+  # consumers (Email subscribers). Supports fan-out and zero-polling delivery.
+  # Free Tier includes 1,000 email notifications and 1,000,000 SNS publish requests/mo.
+  # ============================================================================
+  StreakNudgeTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "streaknudge-alerts-${Environment}"
+      DisplayName: "StreakNudge Alerts"
+      Tags:
+        - Key: Project
+          Value: StreakNudge
+        - Key: Course
+          Value: BIS505
+
+  StreakNudgeEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref StreakNudgeTopic
+      Protocol: email
+      Endpoint: !Ref NotificationEmail
+
+  # ============================================================================
+  # API GATEWAY (HTTP API v2)
+  # Cloud Concepts:
+  # - HTTP API vs REST API: HTTP APIs offer up to 71% cost reduction, lower
+  #   latency, native CORS handling, and direct proxy integration with Lambda.
+  # - Stage Throttling: DefaultRouteSettings rate-limits traffic (10 req/s, burst 20)
+  #   to prevent accidental Free Tier overrun and mitigate denial-of-service.
+  # ============================================================================
+  StreakHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: !Ref Environment
+      CorsConfiguration:
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          - x-api-key
+          - X-Api-Key
+        AllowOrigins:
+          - "*"
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 20 # Maximum burst request concurrency
+        ThrottlingRateLimit: 10  # Maximum steady-state requests per second
+
+  # ============================================================================
+  # CLOUDWATCH LOG GROUPS
+  # Cloud Concept: Explicit log retention prevents unbounded storage growth
+  # in AWS CloudWatch Logs, staying safely within the 5 GB Free Tier tier.
+  # ============================================================================
+  LogSolveLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/streaknudge-log-solve-${Environment}"
+      RetentionInDays: 14
+
+  GetStreakLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/streaknudge-get-streak-${Environment}"
+      RetentionInDays: 14
+
+  NudgeLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/streaknudge-nudge-${Environment}"
+      RetentionInDays: 14
+
+  # ============================================================================
+  # IAM ROLES: LEAST PRIVILEGE PRINCIPLE (No Wildcards)
+  # Cloud Concept: Principle of Least Privilege
+  # Every microservice / Lambda function receives a dedicated execution role.
+  # Permissions are strictly scoped to specific DynamoDB Table ARNs, SNS Topic ARNs,
+  # and Log Group ARNs. No resource: '*' is used.
+  # ============================================================================
+  LogSolveRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "streaknudge-log-solve-role-${Environment}"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        # Justification: LogSolve must perform O(1) GetItem to fetch today's and
+        # yesterday's solve items for idempotent streak calculation, and PutItem
+        # to record the daily solve and upsert user profile metadata.
+        - PolicyName: LogSolveDynamoAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                Resource: !GetAtt StreakTable.Arn
+        - PolicyName: ScopedLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/streaknudge-log-solve-${Environment}:*"
+
+  GetStreakRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "streaknudge-get-streak-role-${Environment}"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        # Justification: GetStreak executes a descending Query with Limit=1 to fetch
+        # the user's single latest solve record, and GetItem to check the user's
+        # PROFILE existence. It has NO write permissions (read-only).
+        - PolicyName: GetStreakDynamoAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                  - dynamodb:GetItem
+                Resource: !GetAtt StreakTable.Arn
+        - PolicyName: ScopedLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/streaknudge-get-streak-${Environment}:*"
+
+  NudgeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "streaknudge-nudge-role-${Environment}"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        # Justification: Nudge performs a Scan with FilterExpression=Attr('SK').eq('PROFILE')
+        # to find registered users, GetItem to check if today's solve exists, and Query
+        # to find their previous active streak count for personalized nudge email text.
+        - PolicyName: NudgeDynamoAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:Scan
+                  - dynamodb:GetItem
+                  - dynamodb:Query
+                Resource: !GetAtt StreakTable.Arn
+        # Justification: Nudge publishes email notifications exclusively to the dedicated
+        # StreakNudge SNS topic. Scoped strictly to the topic ARN.
+        - PolicyName: NudgeSnsPublishAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource: !Ref StreakNudgeTopic
+        - PolicyName: ScopedLogging
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/streaknudge-nudge-${Environment}:*"
+
+  # ============================================================================
+  # LAMBDA FUNCTIONS
+  # ============================================================================
+  LogSolveFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: LogSolveLogGroup
+    Properties:
+      FunctionName: !Sub "streaknudge-log-solve-${Environment}"
+      CodeUri: .
+      Handler: src.log_solve.app.lambda_handler
+      Role: !GetAtt LogSolveRole.Arn
+      Description: "Logs daily DSA solve and updates streak count"
+      Events:
+        HttpPost:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref StreakHttpApi
+            Path: /solves
+            Method: POST
+
+  GetStreakFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: GetStreakLogGroup
+    Properties:
+      FunctionName: !Sub "streaknudge-get-streak-${Environment}"
+      CodeUri: .
+      Handler: src.get_streak.app.lambda_handler
+      Role: !GetAtt GetStreakRole.Arn
+      Description: "Retrieves current streak status for a given user"
+      Events:
+        HttpGet:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref StreakHttpApi
+            Path: /streak/{user}
+            Method: GET
+
+  NudgeFunction:
+    Type: AWS::Serverless::Function
+    DependsOn: NudgeLogGroup
+    Properties:
+      FunctionName: !Sub "streaknudge-nudge-${Environment}"
+      CodeUri: .
+      Handler: src.nudge.app.lambda_handler
+      Role: !GetAtt NudgeRole.Arn
+      Description: "Scans for missing daily DSA solves at 9 PM IST and triggers SNS alert"
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref StreakNudgeTopic
+      Events:
+        # Cloud Concept: Serverless Cron Scheduling via Amazon EventBridge
+        # cron(30 15 * * ? *) executes at 15:30 UTC daily = 21:00 (9:00 PM) IST
+        DailyNudgeSchedule:
+          Type: Schedule
+          Properties:
+            Schedule: "cron(30 15 * * ? *)"
+            Description: "Triggers StreakNudge check daily at 9:00 PM IST (15:30 UTC)"
+
+  # ============================================================================
+  # OBSERVABILITY: CLOUDWATCH DASHBOARD & ALARMS
+  # Cloud Concepts:
+  # - Centralized Observability: Consolidates metrics across compute (Lambda),
+  #   database (DynamoDB), and notifications into a single pane of glass.
+  # - Metric Math Alarms: Combines multiple error series into one threshold check,
+  #   saving CloudWatch alarm quota (AWS Free Tier includes 10 metric alarms).
+  # - Proactive Alerting: Directs critical runtime failures to the SNS topic,
+  #   instantly alerting the operator via email.
+  # ============================================================================
+  StreakMonitoringDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Sub "streaknudge-monitoring-${Environment}"
+      DashboardBody: !Sub |
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "x": 0,
+              "y": 0,
+              "width": 12,
+              "height": 6,
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "metrics": [
+                  [ "AWS/Lambda", "Invocations", "FunctionName", "${LogSolveFunction}", { "label": "LogSolve Invocations" } ],
+                  [ "AWS/Lambda", "Invocations", "FunctionName", "${GetStreakFunction}", { "label": "GetStreak Invocations" } ],
+                  [ "AWS/Lambda", "Invocations", "FunctionName", "${NudgeFunction}", { "label": "Nudge Invocations" } ]
+                ],
+                "region": "${AWS::Region}",
+                "title": "Lambda Invocations (Usage)",
+                "period": 300,
+                "stat": "Sum"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 12,
+              "y": 0,
+              "width": 12,
+              "height": 6,
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "metrics": [
+                  [ "AWS/Lambda", "Errors", "FunctionName", "${LogSolveFunction}", { "label": "LogSolve Errors", "color": "#d62728" } ],
+                  [ "AWS/Lambda", "Errors", "FunctionName", "${GetStreakFunction}", { "label": "GetStreak Errors", "color": "#ff7f0e" } ],
+                  [ "AWS/Lambda", "Errors", "FunctionName", "${NudgeFunction}", { "label": "Nudge Errors", "color": "#9467bd" } ]
+                ],
+                "region": "${AWS::Region}",
+                "title": "Lambda Execution Errors",
+                "period": 300,
+                "stat": "Sum"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 0,
+              "y": 6,
+              "width": 12,
+              "height": 6,
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "metrics": [
+                  [ "AWS/Lambda", "Duration", "FunctionName", "${LogSolveFunction}", { "label": "LogSolve Duration (Avg)" } ],
+                  [ "AWS/Lambda", "Duration", "FunctionName", "${GetStreakFunction}", { "label": "GetStreak Duration (Avg)" } ],
+                  [ "AWS/Lambda", "Duration", "FunctionName", "${NudgeFunction}", { "label": "Nudge Duration (Avg)" } ]
+                ],
+                "region": "${AWS::Region}",
+                "title": "Lambda Latency / Duration (ms)",
+                "period": 300,
+                "stat": "Average"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 12,
+              "y": 6,
+              "width": 12,
+              "height": 6,
+              "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "metrics": [
+                  [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${StreakTable}", { "label": "Consumed RCU" } ],
+                  [ "AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${StreakTable}", { "label": "Consumed WCU" } ]
+                ],
+                "region": "${AWS::Region}",
+                "title": "DynamoDB Consumed Capacity Units",
+                "period": 300,
+                "stat": "Sum"
+              }
+            }
+          ]
+        }
+
+  # CloudWatch Metric Alarm on Lambda Errors -> SNS Topic
+  StreakLambdaErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "streaknudge-lambda-errors-${Environment}"
+      AlarmDescription: "Triggers when any StreakNudge Lambda encounters unhandled errors"
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Threshold: 1
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref StreakNudgeTopic
+      Metrics:
+        - Id: e1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/Lambda
+              MetricName: Errors
+              Dimensions:
+                - Name: FunctionName
+                  Value: !Ref LogSolveFunction
+            Period: 300
+            Stat: Sum
+        - Id: e2
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/Lambda
+              MetricName: Errors
+              Dimensions:
+                - Name: FunctionName
+                  Value: !Ref GetStreakFunction
+            Period: 300
+            Stat: Sum
+        - Id: e3
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/Lambda
+              MetricName: Errors
+              Dimensions:
+                - Name: FunctionName
+                  Value: !Ref NudgeFunction
+            Period: 300
+            Stat: Sum
+        - Id: totalErrors
+          Label: "Total StreakNudge Lambda Execution Errors"
+          ReturnData: true
+          Expression: "e1 + e2 + e3"
+
+Outputs:
+  ApiEndpoint:
+    Description: HTTP API Gateway endpoint base URL
+    Value: !Sub "https://${StreakHttpApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiEndpoint"
+
+  TableName:
+    Description: DynamoDB Table Name
+    Value: !Ref StreakTable
+    Export:
+      Name: !Sub "${AWS::StackName}-TableName"
+
+  TableArn:
+    Description: DynamoDB Table ARN
+    Value: !GetAtt StreakTable.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-TableArn"
+
+  NudgeTopicArn:
+    Description: SNS Topic ARN for StreakNudge alerts
+    Value: !Ref StreakNudgeTopic
+    Export:
+      Name: !Sub "${AWS::StackName}-NudgeTopicArn"
+
+  DashboardName:
+    Description: CloudWatch Monitoring Dashboard Name
+    Value: !Ref StreakMonitoringDashboard
+
+  ErrorsAlarmArn:
+    Description: CloudWatch Alarm ARN for Lambda Errors
+    Value: !GetAtt StreakLambdaErrorsAlarm.Arn
+
+  LogSolveFunctionArn:
+    Description: LogSolve Lambda ARN
+    Value: !GetAtt LogSolveFunction.Arn
+
+  GetStreakFunctionArn:
+    Description: GetStreak Lambda ARN
+    Value: !GetAtt GetStreakFunction.Arn
+
+  NudgeFunctionArn:
+    Description: Nudge Lambda ARN
+    Value: !GetAtt NudgeFunction.Arn
