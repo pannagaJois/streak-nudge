@@ -1,0 +1,539 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@500;600;700&amp;family=Outfit:wght@700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="../api.js"></script><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-container":"#1e5000","on-secondary":"#ffffff","on-tertiary-fixed":"#001e2e","primary-fixed":"#87fe45","on-surface":"#1b1c1c","error-container":"#ffdad6","on-error":"#ffffff","tertiary-container":"#4abdff","surface-dim":"#dbd9d9","on-tertiary":"#ffffff","surface-container":"#efeded","on-primary-fixed":"#082100","background":"#fbf9f8","surface":"#fbf9f8","error":"#ba1a1a","secondary-container":"#fd9500","secondary-fixed":"#ffdcbf","on-primary-fixed-variant":"#1f5100","surface-container-highest":"#e4e2e2","on-secondary-container":"#633700","on-secondary-fixed":"#2d1600","on-primary":"#ffffff","surface-bright":"#fbf9f8","surface-variant":"#e4e2e2","inverse-primary":"#6be026","primary":"#2b6c00","on-background":"#1b1c1c","on-error-container":"#93000a","surface-tint":"#2b6c00","inverse-on-surface":"#f2f0f0","tertiary":"#006590","secondary-fixed-dim":"#ffb872","inverse-surface":"#303030","surface-container-high":"#eae8e7","on-tertiary-container":"#004a6b","primary-fixed-dim":"#6be026","tertiary-fixed-dim":"#88ceff","on-tertiary-fixed-variant":"#004c6e","surface-container-low":"#f5f3f3","tertiary-fixed":"#c8e6ff","on-secondary-fixed-variant":"#6a3b00","outline-variant":"#becbb1","primary-container":"#58cc02","on-surface-variant":"#3f4a36","outline":"#6f7b64","surface-container-lowest":"#ffffff","secondary":"#8c5000"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-mobile":"1rem","space-xl":"2.5rem","margin-mobile":"1rem","space-xs":"0.25rem","space-md":"1rem","gutter":"1.5rem","space-sm":"0.5rem","margin":"2rem","space-lg":"1.5rem"},"fontFamily":{"body-md":["Nunito Sans"],"headline-sm":["Outfit"],"label-md":["Outfit"],"label-sm":["Outfit"],"headline-lg":["Outfit"],"headline-lg-mobile":["Outfit"],"body-sm":["Nunito Sans"],"display-hero-mobile":["Outfit"],"headline-md":["Outfit"],"display-hero":["Outfit"],"label-lg":["Outfit"],"body-lg":["Nunito Sans"],"code-snippet":["Nunito Sans"]},"fontSize":{"body-md":["16px",{"lineHeight":"24px","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"700"}],"label-md":["14px",{"lineHeight":"18px","letterSpacing":"0.03em","fontWeight":"700"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"800"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-lg-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.01em","fontWeight":"700"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"500"}],"display-hero-mobile":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"800"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"700"}],"display-hero":["48px",{"lineHeight":"56px","letterSpacing":"-0.02em","fontWeight":"800"}],"label-lg":["16px",{"lineHeight":"20px","letterSpacing":"0.04em","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"26px","fontWeight":"600"}],"code-snippet":["14px",{"lineHeight":"20px","fontWeight":"700"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface min-h-screen selection:bg-primary-fixed selection:text-on-primary-fixed"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest z-50 flex flex-col justify-between p-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col gap-space-lg"><div class="flex items-center gap-space-sm px-space-xs"><img alt="StreakNudge Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnZN3E0AJRJXlO903V2zHr2zTaIA8nHmr68CgoNb6GE6NjkwRw6MEiETY3ZDvZBmpqvNjjmyHhvq-Y4_BIgG080banp8N26SVm8Ll8_hx4h5SxI5C7_bqqOmrsL87KjpIomqmc5FqjOovlVP7iZLKupQ4rsbW3Q2ka_6ptS4W2ZbdnGN4lwswNxegImyICTZqOtjEv8Kwgr6XIBI3ziRbwan61FbhzvF1XQaMZr5wWHnWVU6aLGqcH"><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-tight tracking-tight">StreakNudge</span><span class="font-label-sm text-label-sm text-on-surface-variant font-bold tracking-wider">Never drop your streak</span></div></div><nav class="flex flex-col gap-space-sm" data-active-classes="bg-primary-container text-on-primary font-bold shadow-[0_4px_0_#46a302]"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-label-lg text-label-lg uppercase tracking-wide" data-path="home" href="../streaknudge_home/code.html"><span class="material-symbols-outlined text-[24px]">local_fire_department</span><span class="">Home</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all uppercase tracking-wide bg-primary-container text-on-primary font-bold shadow-[0_4px_0_#46a302]" data-path="log-solve" href="../streaknudge_log_a_solve/code.html"><span class="material-symbols-outlined text-[24px]">add_circle</span><span class="">Log Solve</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all font-label-lg text-label-lg uppercase tracking-wide" data-path="history" href="../streaknudge_history/code.html"><span class="material-symbols-outlined text-[24px]">calendar_month</span><span class="">History</span></a></nav></div><div class="p-space-md bg-surface-container rounded-2xl flex flex-col gap-space-xs"><div class="flex items-center gap-space-xs text-secondary"><span class="material-symbols-outlined text-[20px]">verified</span><span class="font-label-md text-label-md">StreakNudge API</span></div><p class="font-body-sm text-body-sm text-on-surface-variant leading-tight" id="sidebar-connection-status">Live AWS Serverless Connection</p></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-lg flex items-center justify-end gap-space-md"><div class="flex items-center gap-space-xs bg-secondary-fixed/50 px-space-md py-1.5 rounded-full shadow-[0_2px_0_#ffb872]"><span class="material-symbols-outlined text-secondary text-[20px]">local_fire_department</span><span class="font-label-md text-label-md text-on-secondary-fixed font-bold" id="header-streak-badge">... Days</span></div><div class="flex items-center gap-space-xs bg-tertiary-fixed/60 px-space-md py-1.5 rounded-full shadow-[0_2px_0_#88ceff]"><span class="material-symbols-outlined text-tertiary text-[20px]">ac_unit</span><span class="font-label-md text-label-md text-on-tertiary-fixed font-bold">2 Left</span></div><div class="flex items-center gap-space-xs bg-primary-fixed/40 px-space-md py-1.5 rounded-full shadow-[0_2px_0_#6be026]"><span class="material-symbols-outlined text-primary text-[20px]">diamond</span><span class="font-label-md text-label-md text-on-primary-fixed font-bold">480 XP</span></div><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE3zA5moAnQSnvL4US8jHPz7XYT6KKcTZRGUwcFIqqaY0matITZxiXGNnJvRu46efZODKMlRjqvqsEmlLKwrXxOuuh1lKzHsn-YCSK1WKyxj03xCgJ0KNvjNgSSPHkGRkmc3ChvE0XXV5PceiUaEK3Z5_oLaPTGS0GwCb2Dskzn3PNz_ojMsYHc6DK_cABnDF4Xc2_5SrMH4NgB9fOcoCMZW-3RmsaHulE0FWEelk"></div></div></header><main class="relative pt-16 w-full bg-surface min-h-[calc(100vh-4rem)]"><div class="flex flex-col w-full">
+<div class="max-w-6xl mx-auto w-full px-space-md py-space-lg flex flex-col gap-space-lg">
+<!-- Prototype State Switcher Dock (Allows testing all 4 requested states) -->
+<div class="w-full bg-surface-container rounded-2xl p-space-sm shadow-sm flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs px-space-sm text-on-surface-variant font-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[18px] text-primary">tune</span>
+<span class="">Interactive Demo State</span>
+</div>
+<div class="flex items-center flex-wrap gap-space-xs" id="state-switchers">
+<button class="px-space-md py-1.5 rounded-xl font-label-sm text-label-sm transition-all bg-primary-container text-on-primary shadow-[0_3px_0_#46a302] font-bold" id="btn-state-default" onclick="setScreenState('default')" type="button">
+          1. Default Form
+        </button>
+<button class="px-space-md py-1.5 rounded-xl font-label-sm text-label-sm transition-all bg-surface-container-lowest text-on-surface-variant shadow-[0_3px_0_#dbd9d9] hover:bg-surface-container-high font-bold" id="btn-state-loading" onclick="setScreenState('loading')" type="button">
+          2. Verifying Loading
+        </button>
+<button class="px-space-md py-1.5 rounded-xl font-label-sm text-label-sm transition-all bg-surface-container-lowest text-on-surface-variant shadow-[0_3px_0_#dbd9d9] hover:bg-surface-container-high font-bold" id="btn-state-success" onclick="setScreenState('success')" type="button">
+          3. Victory Celebration 🎉
+        </button>
+<button class="px-space-md py-1.5 rounded-xl font-label-sm text-label-sm transition-all bg-surface-container-lowest text-on-surface-variant shadow-[0_3px_0_#dbd9d9] hover:bg-surface-container-high font-bold" id="btn-state-error" onclick="setScreenState('error')" type="button">
+          4. Error &amp; Retry
+        </button>
+</div>
+</div>
+<!-- Main Layout Container: Centered Form with Side Flame Urgency Widget -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Primary Action Column (Form & Success/Error Views) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<!-- Header Block with Playful Urgency -->
+<div class="flex flex-col gap-space-xs bg-surface-container-lowest p-space-lg rounded-3xl shadow-[0_4px_0_#efeded]">
+<div class="flex items-center justify-between">
+<div class="inline-flex items-center gap-space-xs bg-secondary-fixed/50 px-space-md py-1 rounded-full text-secondary font-label-sm uppercase">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="">Daily Ritual • Quests</span>
+</div>
+<div class="flex items-center gap-1.5 text-secondary font-headline-sm font-bold bg-secondary-fixed/30 px-space-md py-1 rounded-2xl">
+<span class="material-symbols-outlined text-[24px]">timer</span>
+<span id="countdown-timer" class="">06:42:19</span>
+</div>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-space-xs">
+            Log Today's DSA Conquest! ⚔️
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Feed your streak flame before <strong class="text-on-surface">11:59 PM</strong>. Don't make the algorithmic owl cry.
+          </p>
+</div>
+<!-- FORM CARD (Default / Interactive) -->
+<div class="bg-surface-container-lowest rounded-3xl p-space-lg md:p-space-xl shadow-[0_6px_0_#e4e2e2] flex flex-col gap-space-lg transition-all" id="form-panel">
+<!-- Error Alert Banner (Hidden by default, shown via state switch) -->
+<div class="hidden p-space-md rounded-2xl bg-error-container text-on-error-container flex flex-col gap-space-xs shadow-[0_4px_0_#ffdad6]" id="validation-alert">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[22px] text-error">error</span>
+<span class="font-label-lg text-label-lg font-bold">Validation Blocked</span>
+</div>
+<p class="font-body-sm text-body-sm">
+              ⚠️ Oops! Problem title or valid LeetCode URL is required before your flame can ignite.
+            </p>
+</div>
+<!-- Section 1: Problem Title or URL -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface font-bold flex items-center gap-space-xs" for="problem-input">
+<span class="">Problem Title or LeetCode URL</span>
+<span class="text-secondary">*</span>
+</label>
+<button class="font-label-sm text-label-sm text-tertiary font-bold hover:underline flex items-center gap-1" onclick="autofillTodayPick()" type="button">
+<span class="material-symbols-outlined text-[16px]">magic_button</span>
+<span class="">Paste Daily LeetCode</span>
+</button>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest px-space-md py-3.5 rounded-2xl text-on-surface font-body-lg text-body-lg shadow-[0_3px_0_#e4e2e2] focus:outline-none focus:bg-tertiary-fixed/15 focus:shadow-[0_4px_0_#88ceff] transition-all" id="problem-input" placeholder="e.g., 200. Number of Islands or paste URL..." type="text" value="200. Number of Islands">
+<span class="absolute right-4 top-3.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]">code</span>
+</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">auto_awesome</span>
+<span class="">Supports LeetCode, Codeforces, NeetCode 150, and HackerRank links.</span>
+</div>
+</div>
+<!-- Section 2: Difficulty Selection (Tactile 3D Extrusion Chips) -->
+<div class="flex flex-col gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">
+              Difficulty Tier
+            </span>
+<div class="grid grid-cols-3 gap-space-sm" id="difficulty-group">
+<!-- Easy Pill -->
+<button class="py-3 px-4 rounded-2xl font-label-lg text-label-lg font-bold flex flex-col items-center justify-center gap-1 transition-all bg-surface-container-lowest text-on-surface shadow-[0_4px_0_#becbb1] hover:bg-surface-container-low active:translate-y-1 active:shadow-none" id="diff-easy" onclick="selectDifficulty('easy')" type="button">
+<span class="material-symbols-outlined text-[24px] text-primary">spa</span>
+<span class="">Easy</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">+30 XP</span>
+</button>
+<!-- Medium Pill (Selected by default) -->
+<button class="py-3 px-4 rounded-2xl font-label-lg text-label-lg font-bold flex flex-col items-center justify-center gap-1 transition-all bg-secondary-container text-on-secondary shadow-[0_4px_0_#8c5000] active:translate-y-1 active:shadow-none" id="diff-medium" onclick="selectDifficulty('medium')" type="button">
+<span class="material-symbols-outlined text-[24px]">bolt</span>
+<span class="">Medium</span>
+<span class="font-label-sm text-label-sm text-on-secondary-container font-extrabold">+50 XP</span>
+</button>
+<!-- Hard Pill -->
+<button class="py-3 px-4 rounded-2xl font-label-lg text-label-lg font-bold flex flex-col items-center justify-center gap-1 transition-all bg-surface-container-lowest text-on-surface shadow-[0_4px_0_#becbb1] hover:bg-surface-container-low active:translate-y-1 active:shadow-none" id="diff-hard" onclick="selectDifficulty('hard')" type="button">
+<span class="material-symbols-outlined text-[24px] text-error">local_fire_department</span>
+<span class="">Hard</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">+100 XP</span>
+</button>
+</div>
+</div>
+<!-- Section 3: Topic Tags / Categories Multi-Select -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">
+                Categorical Patterns (Pick 1 or more)
+              </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tap to tag</span>
+</div>
+<div class="flex flex-wrap gap-2.5" id="topic-tags">
+<button class="tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-tertiary-fixed text-on-tertiary-fixed font-bold shadow-[0_3px_0_#88ceff] active:translate-y-0.5" onclick="toggleTag(this)" type="button">
+                Graphs ✓
+              </button>
+<button class="tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-tertiary-fixed text-on-tertiary-fixed font-bold shadow-[0_3px_0_#88ceff] active:translate-y-0.5" onclick="toggleTag(this)" type="button">
+                Breadth-First Search ✓
+              </button>
+<button class="tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-surface-container-high text-on-surface font-bold shadow-[0_3px_0_#dbd9d9] hover:bg-surface-variant active:translate-y-0.5" onclick="toggleTag(this)" type="button">
+                Arrays &amp; Hashing
+              </button>
+<button class="tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-surface-container-high text-on-surface font-bold shadow-[0_3px_0_#dbd9d9] hover:bg-surface-variant active:translate-y-0.5" onclick="toggleTag(this)" type="button">
+                Two Pointers
+              </button>
+<button class="tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-surface-container-high text-on-surface font-bold shadow-[0_3px_0_#dbd9d9] hover:bg-surface-variant active:translate-y-0.5" onclick="toggleTag(this)" type="button">
+                Dynamic Programming
+              </button>
+<button class="tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-surface-container-high text-on-surface font-bold shadow-[0_3px_0_#dbd9d9] hover:bg-surface-variant active:translate-y-0.5" onclick="toggleTag(this)" type="button">
+                Binary Trees
+              </button>
+<button class="tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-surface-container-high text-on-surface font-bold shadow-[0_3px_0_#dbd9d9] hover:bg-surface-variant active:translate-y-0.5" onclick="toggleTag(this)" type="button">
+                Union Find
+              </button>
+</div>
+</div>
+<!-- Section 4: Accordion for Time Spent & Self Reflection -->
+<div class="rounded-2xl bg-surface-container-low p-space-md flex flex-col gap-space-sm shadow-[0_2px_0_#e4e2e2]">
+<button class="w-full flex items-center justify-between text-left" onclick="toggleReflection()" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">psychology</span>
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Reflection &amp; Solve Metrics (Optional)</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform" id="accordion-icon">expand_more</span>
+</button>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md pt-space-xs" id="reflection-content">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Time Taken</label>
+<div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-2 rounded-xl shadow-[0_2px_0_#e4e2e2]">
+<span class="material-symbols-outlined text-[18px] text-tertiary">pace</span>
+<input class="w-full bg-transparent font-body-md text-body-md text-on-surface focus:outline-none" type="text" value="28 minutes">
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Hint Dependency</label>
+<select class="w-full bg-surface-container-lowest px-3 py-2 rounded-xl shadow-[0_2px_0_#e4e2e2] font-body-md text-body-md text-on-surface focus:outline-none">
+<option selected="">Needed 1 small hint 💡</option>
+<option>Zero hints (Flawless run) 🧠</option>
+<option>Looked at conceptual solution 📖</option>
+<option>Full tutorial walkthrough 🛠️</option>
+</select>
+</div>
+<div class="md:col-span-2 flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Quick Key Takeaway / Edge Case</label>
+<input class="bg-surface-container-lowest px-3 py-2 rounded-xl shadow-[0_2px_0_#e4e2e2] font-body-md text-body-md text-on-surface focus:outline-none" placeholder="e.g., Visited matrix mutates grid in-place to save O(N*M) space..." type="text" value="Used queue for BFS, visited cells marked as '0' directly.">
+</div>
+</div>
+</div>
+<!-- Section 5: Big Chunky Tactile Duolingo Submit Button -->
+<div class="pt-space-xs flex flex-col gap-space-xs">
+<button class="w-full py-4 px-6 rounded-2xl bg-primary-container text-on-primary font-headline-sm text-headline-sm tracking-wide shadow-[0_5px_0_#46a302] hover:bg-primary-container/95 active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-space-sm" id="main-submit-btn" onclick="handleSubmit()" type="button">
+<span class="material-symbols-outlined text-[28px] text-on-primary animate-pulse">local_fire_department</span>
+<span class="">SUBMIT &amp; EXTEND STREAK (Day 17)</span>
+</button>
+<span class="text-center font-body-sm text-body-sm text-on-surface-variant">
+              Guaranteed sync with your global leaderboard ranking!
+            </span>
+</div>
+</div>
+<!-- LOADING STATE VIEW (Dynamically Shown) -->
+<div class="hidden bg-surface-container-lowest rounded-3xl p-space-xl shadow-[0_6px_0_#e4e2e2] flex flex-col items-center justify-center text-center gap-space-md py-16" id="loading-panel">
+<div class="relative w-24 h-24 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-4 border-surface-container-highest animate-spin" style="border-top-color: #58cc02; border-right-color: #fd9500;"></div>
+<span class="material-symbols-outlined text-[44px] text-secondary animate-bounce">local_fire_department</span>
+</div>
+<div class="flex flex-col gap-1 max-w-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Verifying submission...</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Holding the streak flame while querying algorithm execution logs and test cases on remote nodes.
+            </p>
+</div>
+<div class="bg-surface-container-low px-space-md py-2 rounded-full font-label-sm text-label-sm text-primary font-bold flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
+            Syncing with LeetCode API Webhook #8921
+          </div>
+</div>
+<!-- SUCCESS STATE VIEW (Trophy Celebration) -->
+<div class="hidden bg-surface-container-lowest rounded-3xl p-space-lg md:p-space-xl shadow-[0_6px_0_#e4e2e2] flex flex-col gap-space-lg text-center items-center py-10" id="success-panel">
+<!-- Confetti / Trophy Badge Area -->
+<div class="w-24 h-24 rounded-full bg-secondary-fixed flex items-center justify-center shadow-[0_5px_0_#ffb872]">
+<span class="material-symbols-outlined text-[56px] text-secondary">workspace_premium</span>
+</div>
+<div class="flex flex-col gap-space-xs max-w-lg">
+<div class="inline-flex self-center px-4 py-1 rounded-full bg-primary-container/20 text-primary font-label-md text-label-md font-bold" id="success-streak-banner">
+              FLAME EXTENDED TO 17 DAYS!
+            </div>
+<h2 class="font-display-hero text-display-hero text-on-surface tracking-tight" id="success-headline">
+              STREAK SAVED! 🎉
+            </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant" id="success-problem-desc">
+              You defeated <strong class="text-on-surface" id="success-problem-title">200. Number of Islands</strong>! Your dedication keeps your momentum alive!
+            </p>
+</div>
+<!-- Reward Drops -->
+<div class="grid grid-cols-3 gap-space-md w-full max-w-md">
+<div class="bg-surface-container-low p-space-md rounded-2xl shadow-[0_3px_0_#e4e2e2] flex flex-col items-center">
+<span class="material-symbols-outlined text-[28px] text-secondary">local_fire_department</span>
+<span class="font-headline-sm text-headline-sm text-on-surface" id="success-streak-number">17</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Day Streak</span>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-2xl shadow-[0_3px_0_#e4e2e2] flex flex-col items-center">
+<span class="material-symbols-outlined text-[28px] text-primary">diamond</span>
+<span class="font-headline-sm text-headline-sm text-primary">+50</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">XP Points</span>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-2xl shadow-[0_3px_0_#e4e2e2] flex flex-col items-center">
+<span class="material-symbols-outlined text-[28px] text-tertiary">token</span>
+<span class="font-headline-sm text-headline-sm text-tertiary">+5</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Freeze Gems</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-space-sm w-full max-w-md pt-space-xs">
+<a href="../streaknudge_home/code.html" class="flex-1 py-3 px-6 rounded-2xl bg-primary-container text-on-primary font-label-lg text-label-lg shadow-[0_4px_0_#46a302] hover:bg-primary-container/90 active:translate-y-1 text-center font-bold">
+              View Dashboard
+            </a>
+<button class="py-3 px-6 rounded-2xl bg-surface-container-high text-on-surface font-label-lg text-label-lg shadow-[0_4px_0_#dbd9d9] hover:bg-surface-variant active:translate-y-1" onclick="setScreenState('default')" type="button">
+              Log Another
+            </button>
+</div>
+</div>
+<!-- ERROR STATE VIEW (Validation / API Fail) -->
+<div class="hidden bg-surface-container-lowest rounded-3xl p-space-lg md:p-space-xl shadow-[0_6px_0_#e4e2e2] flex flex-col gap-space-md items-center text-center py-10" id="error-panel">
+<div class="w-20 h-20 rounded-full bg-error-container flex items-center justify-center shadow-[0_4px_0_#ffdad6]">
+<span class="material-symbols-outlined text-[48px] text-error">cloud_off</span>
+</div>
+<div class="flex flex-col gap-space-xs max-w-md">
+<h2 class="font-headline-md text-headline-md text-error" id="error-title">Streak Log Failed</h2>
+<p class="font-body-md text-body-md text-on-surface-variant" id="error-desc">
+              Unable to record your solve on the StreakNudge server.
+            </p>
+</div>
+<div class="w-full max-w-md bg-error-container/40 p-space-md rounded-2xl text-left flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-error text-[20px] mt-0.5">info</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-error font-bold">Diagnostics:</span>
+<span class="font-code-snippet text-code-snippet text-on-surface" id="error-diagnostics">Check API configuration and try again.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm w-full max-w-md pt-space-xs">
+<button class="flex-1 py-3 px-6 rounded-2xl bg-secondary text-on-secondary font-label-lg text-label-lg shadow-[0_4px_0_#633700] hover:bg-secondary/90 active:translate-y-1" onclick="setScreenState('loading')" type="button">
+              Retry Streak Lock
+            </button>
+<button class="py-3 px-6 rounded-2xl bg-surface-container-high text-on-surface font-label-lg text-label-lg shadow-[0_4px_0_#dbd9d9]" onclick="setScreenState('default')" type="button">
+              Edit Form
+            </button>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Streak & Motivation Widget Rail -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<!-- Tactile Streak Flame Widget (Inspired by calendar graphic) -->
+<div class="bg-surface-container-lowest rounded-3xl p-space-lg shadow-[0_5px_0_#e4e2e2] flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<div class="flex items-baseline gap-1">
+<span class="font-display-hero text-display-hero text-secondary leading-none font-black">16</span>
+<span class="font-headline-sm text-headline-sm text-secondary">DAYS</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Active Streak</span>
+</div>
+<!-- Stylized Chunky Flame Badge -->
+<div class="relative w-16 h-16 rounded-2xl bg-secondary-fixed flex items-center justify-center shadow-[0_4px_0_#ffb872]">
+<span class="material-symbols-outlined text-secondary text-[36px]">local_fire_department</span>
+</div>
+</div>
+<!-- Motivation Callout Pill -->
+<div class="bg-secondary-fixed/40 p-space-sm rounded-2xl flex items-center gap-space-sm shadow-[0_2px_0_#ffdcbf]">
+<span class="material-symbols-outlined text-secondary text-[24px]">verified</span>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed leading-tight">
+              Keep your <strong>Perfect Streak</strong> by logging before the midnight bell!
+            </p>
+</div>
+<!-- Mini Calendar Strip (December 2025 like Reference) -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm font-bold">
+<span class="">December 2025</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] cursor-pointer">chevron_left</span>
+<span class="material-symbols-outlined text-[18px] cursor-pointer">chevron_right</span>
+</div>
+</div>
+<!-- Mini Weekday Labels -->
+<div class="grid grid-cols-7 text-center font-label-sm text-label-sm text-on-surface-variant py-1">
+<span class="">Su</span><span class="">Mo</span><span class="">Tu</span><span class="">We</span><span class="">Th</span><span class="">Fr</span><span class="">Sa</span>
+</div>
+<!-- Mini Calendar Heatmap Track -->
+<div class="grid grid-cols-7 gap-1.5 text-center font-label-md text-label-md">
+<span class="py-1 text-on-surface-variant/40">14</span>
+<span class="py-1 text-on-surface-variant/40">15</span>
+<span class="py-1 rounded-xl bg-secondary text-on-secondary font-bold shadow-[0_2px_0_#633700]">16</span>
+<span class="py-1 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed font-bold relative">
+                17
+                <span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+</span>
+<span class="py-1 text-on-surface-variant">18</span>
+<span class="py-1 text-on-surface-variant">19</span>
+<span class="py-1 text-on-surface-variant">20</span>
+</div>
+</div>
+<!-- Streak Protect Shields / Freeze Inventory -->
+<div class="pt-space-xs flex items-center justify-between bg-surface-container p-space-sm rounded-2xl">
+<div class="flex items-center gap-space-xs text-tertiary font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[20px]">ac_unit</span>
+<span class="">2 Streak Freezes Left</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary font-bold hover:underline" onclick="alert('Streak freeze is ready to auto-equip if midnight passes.')" type="button">
+              Auto-Armed
+            </button>
+</div>
+</div>
+<!-- Weekly Problem Solved Quests -->
+<div class="bg-surface-container-lowest rounded-3xl p-space-lg shadow-[0_5px_0_#e4e2e2] flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Weekly Quests</span>
+<span class="font-label-sm text-label-sm bg-primary-fixed/50 text-on-primary-fixed font-bold px-2 py-0.5 rounded-full">
+              4 / 5 Done
+            </span>
+</div>
+<!-- Quest 1 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">check_circle</span>
+                Solve 3 Mediums
+              </span>
+<span class="text-primary font-bold">3/3</span>
+</div>
+<div class="w-full h-3 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Quest 2 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">trending_up</span>
+                Solve 1 Graph Problem
+              </span>
+<span class="text-secondary font-bold">In Progress</span>
+</div>
+<div class="w-full h-3 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-secondary-container rounded-full" style="width: 70%;"></div>
+</div>
+</div>
+</div>
+<!-- Visual Milestone Graphic Card -->
+<div class="bg-surface-container-lowest rounded-3xl p-space-md shadow-[0_5px_0_#e4e2e2] flex items-center gap-space-md">
+<img class="w-16 h-16 rounded-2xl object-cover bg-surface-container" data-alt="Playful 3D isometric green Duolingo style cartoon fire dragon mascot holding a gleaming algorithm code trophy with vibrant green and orange studio lighting on clean white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXNrFYlO5Sznq3AEkxdb61hL8DMRJH802JGVRl0Q7d-U0059JxHDmL4JuwzNs746X3lQjJaa1evxQHcHvvZuUw4C4QrE-H3OQOjNOL5iNItFTHj7G6nGoxAeH_QS-WggQ_EEh910fQPKkubGLsQH7prSnhdChg07t2qQ-206n6YVc4sP-OOnEvfgBLx0ocNyNQSG5vwK8trsVJ95_-fVq96H6AlfZMC1scpDxmuaM">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Milestone in 4 Days</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Unlock the 21-Day Habit Master badge &amp; 300 bonus XP.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Prototype State Controller for reviewer testing
+  function setScreenState(state) {
+    const formPanel = document.getElementById('form-panel');
+    const loadingPanel = document.getElementById('loading-panel');
+    const successPanel = document.getElementById('success-panel');
+    const errorPanel = document.getElementById('error-panel');
+    const validationAlert = document.getElementById('validation-alert');
+
+    // Reset visibility
+    formPanel.classList.add('hidden');
+    loadingPanel.classList.add('hidden');
+    successPanel.classList.add('hidden');
+    errorPanel.classList.add('hidden');
+    validationAlert.classList.add('hidden');
+
+    // Update Top switcher buttons appearance
+    ['default', 'loading', 'success', 'error'].forEach(s => {
+      const btn = document.getElementById('btn-state-' + s);
+      if (s === state) {
+        btn.className = "px-space-md py-1.5 rounded-xl font-label-sm text-label-sm transition-all bg-primary-container text-on-primary shadow-[0_3px_0_#46a302] font-bold";
+      } else {
+        btn.className = "px-space-md py-1.5 rounded-xl font-label-sm text-label-sm transition-all bg-surface-container-lowest text-on-surface-variant shadow-[0_3px_0_#dbd9d9] hover:bg-surface-container-high font-bold";
+      }
+    });
+
+    if (state === 'default') {
+      formPanel.classList.remove('hidden');
+    } else if (state === 'loading') {
+      loadingPanel.classList.remove('hidden');
+    } else if (state === 'success') {
+      successPanel.classList.remove('hidden');
+    } else if (state === 'error') {
+      errorPanel.classList.remove('hidden');
+      formPanel.classList.remove('hidden');
+      validationAlert.classList.remove('hidden');
+    }
+  }
+
+  let selectedDifficulty = 'Medium';
+
+  // Difficulty Selector Micro-interaction
+  function selectDifficulty(diff) {
+    selectedDifficulty = diff === 'easy' ? 'Easy' : (diff === 'medium' ? 'Medium' : 'Hard');
+
+    const easyBtn = document.getElementById('diff-easy');
+    const medBtn = document.getElementById('diff-medium');
+    const hardBtn = document.getElementById('diff-hard');
+
+    const resetClass = "py-3 px-4 rounded-2xl font-label-lg text-label-lg font-bold flex flex-col items-center justify-center gap-1 transition-all bg-surface-container-lowest text-on-surface shadow-[0_4px_0_#becbb1] hover:bg-surface-container-low active:translate-y-1 active:shadow-none";
+    easyBtn.className = resetClass;
+    medBtn.className = resetClass;
+    hardBtn.className = resetClass;
+
+    if (diff === 'easy') {
+      easyBtn.className = "py-3 px-4 rounded-2xl font-label-lg text-label-lg font-bold flex flex-col items-center justify-center gap-1 transition-all bg-primary-fixed text-on-primary-fixed shadow-[0_4px_0_#6be026] active:translate-y-1 active:shadow-none";
+    } else if (diff === 'medium') {
+      medBtn.className = "py-3 px-4 rounded-2xl font-label-lg text-label-lg font-bold flex flex-col items-center justify-center gap-1 transition-all bg-secondary-container text-on-secondary shadow-[0_4px_0_#8c5000] active:translate-y-1 active:shadow-none";
+    } else if (diff === 'hard') {
+      hardBtn.className = "py-3 px-4 rounded-2xl font-label-lg text-label-lg font-bold flex flex-col items-center justify-center gap-1 transition-all bg-error-container text-on-error-container shadow-[0_4px_0_#ffdad6] active:translate-y-1 active:shadow-none";
+    }
+  }
+
+  // Tag chip multi-select
+  function toggleTag(el) {
+    const isSelected = el.innerText.includes('✓');
+    if (isSelected) {
+      el.innerText = el.innerText.replace(' ✓', '');
+      el.className = "tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-surface-container-high text-on-surface font-bold shadow-[0_3px_0_#dbd9d9] hover:bg-surface-variant active:translate-y-0.5";
+    } else {
+      el.innerText = el.innerText + ' ✓';
+      el.className = "tag-chip px-4 py-2 rounded-xl font-label-md text-label-md bg-tertiary-fixed text-on-tertiary-fixed font-bold shadow-[0_3px_0_#88ceff] active:translate-y-0.5";
+    }
+  }
+
+  // Accordion toggle
+  function toggleReflection() {
+    const content = document.getElementById('reflection-content');
+    const icon = document.getElementById('accordion-icon');
+    if (content.classList.contains('hidden')) {
+      content.classList.remove('hidden');
+      icon.innerText = 'expand_more';
+    } else {
+      content.classList.add('hidden');
+      icon.innerText = 'chevron_right';
+    }
+  }
+
+  // Autofill helper
+  function autofillTodayPick() {
+    const input = document.getElementById('problem-input');
+    input.value = "200. Number of Islands";
+    input.focus();
+  }
+
+  // Real Backend Submit Flow
+  async function handleSubmit() {
+    const input = document.getElementById('problem-input');
+    const problem = input.value.trim();
+    if (!problem) {
+      const alert = document.getElementById('validation-alert');
+      if (alert) alert.classList.remove('hidden');
+      return;
+    }
+
+    setScreenState('loading');
+
+    try {
+      const cfg = StreakApi.getConfig();
+      const res = await StreakApi.logSolve({
+        problem: problem,
+        difficulty: selectedDifficulty,
+        customUser: cfg.user,
+        customEmail: cfg.email,
+      });
+
+      console.log('Solve logged successfully:', res);
+
+      const banner = document.getElementById('success-streak-banner');
+      const headline = document.getElementById('success-headline');
+      const desc = document.getElementById('success-problem-desc');
+      const num = document.getElementById('success-streak-number');
+
+      if (banner) {
+        banner.textContent = res.is_same_day_repeat 
+          ? `SAME-DAY SOLVE LOGGED (STREAK: ${res.streak_count})` 
+          : `FLAME EXTENDED TO ${res.streak_count} DAYS!`;
+      }
+      if (headline) {
+        headline.textContent = res.is_same_day_repeat ? 'REPEAT SOLVE SAVED! ⚡' : 'STREAK EXTENDED! 🎉';
+      }
+      if (desc) {
+        desc.innerHTML = `You solved <strong class="text-on-surface">${res.problem}</strong> (${res.difficulty})! Streak count: <strong>${res.streak_count}</strong>.`;
+      }
+      if (num) {
+        num.textContent = res.streak_count;
+      }
+
+      setScreenState('success');
+    } catch (err) {
+      console.error('Failed to log solve:', err);
+      const diag = document.getElementById('error-diagnostics');
+      if (diag) {
+        diag.textContent = err.message || 'API request rejected.';
+      }
+      setScreenState('error');
+    }
+  }
+
+  // Auto-sync connection status
+  document.addEventListener('DOMContentLoaded', () => {
+    const cfg = StreakApi.getConfig();
+    const sidebar = document.getElementById('sidebar-connection-status');
+    if (sidebar) sidebar.textContent = `User: ${cfg.user} • ${cfg.apiUrl.replace(/^https?:\/\//, '')}`;
+  });
+</script></main></div>
+
+</body></html>

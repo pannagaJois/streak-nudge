@@ -67,6 +67,11 @@ def authenticate_request(headers: Optional[Dict[str, str]]) -> bool:
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """AWS Lambda entry point for retrieving a user's streak status."""
+    # Handle CORS OPTIONS pre-flight from web browsers
+    http_method = event.get("requestContext", {}).get("http", {}).get("method") or event.get("httpMethod") or ""
+    if http_method.upper() == "OPTIONS":
+        return build_response(200, {"message": "OK"})
+
     # 1. API-Key Header Authentication
     headers = event.get("headers") or {}
     if not authenticate_request(headers):

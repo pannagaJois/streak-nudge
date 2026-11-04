@@ -142,16 +142,23 @@ StreakNudge runs at **$0.00 / month** under typical usage:
 ```text
 streaknudge/
 ├── template.yaml                  # AWS SAM infrastructure definition
+├── frontend/                      # Gamified Web & Mobile Dashboard
+│   ├── index.html                 # Entry point (auto-redirects to Home)
+│   ├── api.js                     # Client SDK & Backend Settings modal
+│   ├── streaknudge_home/          # Main dashboard (real streak, live countdown)
+│   ├── streaknudge_log_a_solve/   # Form connected to POST /solves
+│   ├── streaknudge_history/       # Solves calendar & history archive
+│   └── streaknudge_mobile_*/      # Mobile-optimized companion screens
 ├── src/
 │   ├── common/
 │   │   ├── __init__.py
 │   │   └── streak.py              # Pure IST streak logic (zero cloud dependencies)
 │   ├── log_solve/
 │   │   ├── __init__.py
-│   │   └── app.py                 # POST /solves Lambda handler
+│   │   └── app.py                 # POST /solves Lambda handler (CORS enabled)
 │   ├── get_streak/
 │   │   ├── __init__.py
-│   │   └── app.py                 # GET /streak/{user} Lambda handler
+│   │   └── app.py                 # GET /streak/{user} Lambda handler (CORS enabled)
 │   └── nudge/
 │       ├── __init__.py
 │       └── app.py                 # Scheduled 9 PM IST Nudge Lambda handler
@@ -163,36 +170,46 @@ streaknudge/
 │   ├── test_get_streak.py         # 7 tests for GET /streak/{user}
 │   ├── test_nudge.py              # 4 tests for EventBridge & SNS notification
 │   ├── test_cloudwatch_config.py  # 3 tests validating Dashboard & Error Alarm
-│   └── test_iam_audit.py          # 6 tests auditing PoLP and zero wildcards
+│   ├── test_iam_audit.py          # 6 tests auditing PoLP and zero wildcards
+│   └── test_frontend_integration.py # 2 tests verifying full-stack dev server
 ├── scripts/
-│   └── demo.sh                    # Colored cURL test script for live verification
+│   ├── demo.sh                    # Colored cURL test script for live verification
+│   └── dev_server.py              # Full-stack local server (UI + in-memory DynamoDB)
 └── README.md                      # Complete documentation & report guide
 ```
 
 ---
 
-## 7. Setup & Local Testing
+## 7. Setup, Local Testing & Full-Stack Server
 
-### Prerequisites
-* Python 3.12 or later
-* Virtual environment tool (`venv`)
-* AWS SAM CLI (for deployment)
+### Run Local Full-Stack Development Server (Zero Cloud Setup Needed)
+
+You can run both the frontend dashboard and local serverless backend with an in-memory DynamoDB database in a single command:
+
+```bash
+# 1. Activate your virtual environment
+source .venv/bin/activate
+
+# 2. Start the local server
+python3 scripts/dev_server.py 3000
+```
+
+Open your browser to:
+* **Dashboard**: `http://localhost:3000/frontend/streaknudge_home/code.html`
+* **Log Solve**: `http://localhost:3000/frontend/streaknudge_log_a_solve/code.html`
+* **History**: `http://localhost:3000/frontend/streaknudge_history/code.html`
+
+> [!TIP]
+> The bottom-right **"Backend Config"** floating button in the UI lets you toggle between `http://localhost:3000` and your live deployed AWS API Gateway endpoint at any time with a single click!
 
 ### Run Unit & Integration Tests (100% Mocked with Moto)
 
 ```bash
-# 1. Create and activate a Python virtual environment
-python3 -m venv .venv
-source .venv/bin/activate
-
-# 2. Install test dependencies
-pip install pytest moto boto3 freezegun pyyaml
-
-# 3. Execute all 43 tests
+# Execute all 45 automated tests
 pytest tests/ -v
 ```
 
-All 43 tests pass without connecting to real AWS infrastructure:
+All 45 tests pass without connecting to real AWS infrastructure:
 * 11 streak calculation logic tests
 * 4 DynamoDB single-table schema tests
 * 8 `LogSolve` API tests
@@ -200,6 +217,7 @@ All 43 tests pass without connecting to real AWS infrastructure:
 * 4 `Nudge` scheduling & SNS tests
 * 3 CloudWatch Dashboard & Metric Math Alarm tests
 * 6 IAM least-privilege audit tests
+* 2 full-stack dev server and static frontend integration tests
 
 ---
 

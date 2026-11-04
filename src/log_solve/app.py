@@ -101,6 +101,11 @@ def validate_payload(data: Any) -> Tuple[bool, Optional[str]]:
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """AWS Lambda entry point for logging a solved DSA problem."""
+    # Handle CORS OPTIONS pre-flight from web browsers
+    http_method = event.get("requestContext", {}).get("http", {}).get("method") or event.get("httpMethod") or ""
+    if http_method.upper() == "OPTIONS":
+        return build_response(200, {"message": "OK"})
+
     # 1. API-Key Header Authentication
     headers = event.get("headers") or {}
     if not authenticate_request(headers):
