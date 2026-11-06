@@ -184,27 +184,28 @@ streaknudge/
 
 ### Run Local Full-Stack Development Server (Zero Cloud Setup Needed)
 
-You can run both the frontend dashboard and local serverless backend with an in-memory DynamoDB database in a single command:
+You can run both the frontend dashboard and the local serverless backend with an in-memory DynamoDB database in a single command. The dev server **automatically detects** your project virtual environment ([`.venv`](file:///home/jois/projects/streaknudge/.venv)) or falls back gracefully to a standard Python static web server:
 
 ```bash
-# 1. Activate your virtual environment
-source .venv/bin/activate
-
-# 2. Start the local server
+# Start the local server on port 3000
 python3 scripts/dev_server.py 3000
 ```
 
 Open your browser to:
 * **Dashboard**: `http://localhost:3000/frontend/streaknudge_home/code.html`
 * **Log Solve**: `http://localhost:3000/frontend/streaknudge_log_a_solve/code.html`
+* **History & Solves**: `http://localhost:3000/frontend/streaknudge_history/code.html`
 
 > [!TIP]
-> The desktop dashboard automatically uses `http://localhost:3000` when opened from this server. The bottom-right **"Backend Config"** floating button lets you switch to a live deployed AWS API Gateway endpoint at any time. History is not linked because the backend currently exposes only streak lookup and solve logging.
+> The frontend client SDK ([`frontend/api.js`](file:///home/jois/projects/streaknudge/frontend/api.js)) comes with a floating **"Backend Config"** modal (bottom-right cloud button). It allows you to switch in real-time between your local mock (`http://localhost:3000`) and the live deployed AWS API Gateway endpoint (`https://cek85tv09l.execute-api.ap-southeast-2.amazonaws.com/dev`).
 
 ### Run Unit & Integration Tests (100% Mocked with Moto)
 
 ```bash
-# Execute all 45 automated tests
+# 1. Activate your virtual environment
+source .venv/bin/activate
+
+# 2. Execute all 45 automated tests
 pytest tests/ -v
 ```
 
@@ -224,27 +225,39 @@ All 45 tests pass without connecting to real AWS infrastructure:
 
 ### Deploy via AWS SAM CLI
 
+#### 1-Command Automated Deploy (Recommended)
+Once [`samconfig.toml`](file:///home/jois/projects/streaknudge/samconfig.toml) is present in the project, build and deploy without interactive prompts:
+
 ```bash
-# 1. Build the serverless application
+# Build Lambda artifacts
 sam build
 
-# 2. Deploy to AWS interactively (first deployment)
-sam deploy --guided
-
-# Suggested Prompts:
-# - Stack Name: streaknudge
-# - AWS Region: ap-south-1 (Mumbai) or us-east-1
-# - Parameter Environment [dev]: dev
-# - Parameter NotificationEmail: your-email@domain.com
-# - Parameter ApiKeyParam: streaknudge-secret-key-12345
-# - Confirm changes before deploy [y/N]: y
-# - Allow SAM CLI IAM role creation [Y/n]: Y
-# - Save arguments to configuration file (samconfig.toml) [Y/n]: Y
-
-# 3. Confirm SNS Email Subscription
-# AWS will send a confirmation email to the address provided in NotificationEmail.
-# Click "Confirm subscription" in that email to begin receiving 9 PM nudges!
+# Deploy directly to AWS
+sam deploy
 ```
+
+#### Guided Interactive Deployment (First Time or Reconfiguring)
+```bash
+sam deploy --guided
+```
+
+| Prompt | Recommended Value | Notes |
+| :--- | :--- | :--- |
+| **Stack Name** | `streaknudge` | CloudFormation stack identifier |
+| **AWS Region** | `ap-southeast-2` or `ap-south-1` | AWS deployment region |
+| **Parameter Environment** | `dev` | Deployment stage tag |
+| **Parameter NotificationEmail** | `your-email@example.com` | Email for SNS daily nudges & CloudWatch error alerts |
+| **Parameter ApiKeyParam** | `streaknudge-secret-key-12345` | API key masked by `NoEcho: true` in CloudFormation |
+| **Confirm changes before deploy**| `N` | Set to `N` for fast automated deployment |
+| **Allow SAM CLI IAM creation** | `Y` | Grants permission to create least-privilege Lambda execution roles |
+| **Disable rollback** | `N` | **Must be N**: AWS requires rollback enabled to replace SNS email subscriptions |
+| **Save arguments to samconfig.toml**| `Y` | Saves settings for subsequent 1-command `sam deploy` |
+
+#### Confirm SNS Email Subscription
+AWS SNS automatically sends a verification email to your `NotificationEmail` with subject:
+> *"AWS Notification - Subscription Confirmation"*
+
+Click the **"Confirm subscription"** link in that email to start receiving daily 9:00 PM IST nudges and error alarms.
 
 ---
 
