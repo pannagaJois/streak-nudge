@@ -429,8 +429,10 @@
       }
     } catch (err) {
       console.warn("Could not load streak from backend, falling back to cached state:", err.message);
-      // Fallback display
-      setAtRiskState(1);
+      setEmptyState();
+      if (sidebarConnection) {
+        sidebarConnection.textContent = `Backend unavailable: ${err.message}`;
+      }
     }
   }
 
@@ -438,6 +440,45 @@
   if (primaryLogBtn) {
     primaryLogBtn.addEventListener('click', () => {
       window.location.href = '../streaknudge_log_a_solve/code.html';
+    });
+  }
+
+  if (quickLogBtn) {
+    quickLogBtn.addEventListener('click', async () => {
+      quickLogBtn.disabled = true;
+      quickLogBtn.classList.add('opacity-60', 'cursor-wait');
+
+      try {
+        const cfg = StreakApi.getConfig();
+        const result = await StreakApi.logSolve({
+          problem: '3Sum',
+          difficulty: 'Medium',
+          customUser: cfg.user,
+          customEmail: cfg.email,
+        });
+
+        triggerSuccessState(result.streak_count);
+        if (toastSuccess) {
+          const toastMessage = toastSuccess.querySelector('.font-body-sm');
+          if (toastMessage) {
+            toastMessage.textContent = `3Sum logged. Streak is now ${result.streak_count} days.`;
+          }
+          toastSuccess.classList.remove('translate-y-32', 'opacity-0');
+          toastSuccess.classList.add('translate-y-0', 'opacity-100');
+          setTimeout(() => {
+            toastSuccess.classList.add('translate-y-32', 'opacity-0');
+            toastSuccess.classList.remove('translate-y-0', 'opacity-100');
+          }, 3500);
+        }
+      } catch (err) {
+        console.error('Quick log failed:', err);
+        if (sidebarConnection) {
+          sidebarConnection.textContent = `Backend error: ${err.message}`;
+        }
+      } finally {
+        quickLogBtn.disabled = false;
+        quickLogBtn.classList.remove('opacity-60', 'cursor-wait');
+      }
     });
   }
 

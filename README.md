@@ -197,10 +197,9 @@ python3 scripts/dev_server.py 3000
 Open your browser to:
 * **Dashboard**: `http://localhost:3000/frontend/streaknudge_home/code.html`
 * **Log Solve**: `http://localhost:3000/frontend/streaknudge_log_a_solve/code.html`
-* **History**: `http://localhost:3000/frontend/streaknudge_history/code.html`
 
 > [!TIP]
-> The bottom-right **"Backend Config"** floating button in the UI lets you toggle between `http://localhost:3000` and your live deployed AWS API Gateway endpoint at any time with a single click!
+> The desktop dashboard automatically uses `http://localhost:3000` when opened from this server. The bottom-right **"Backend Config"** floating button lets you switch to a live deployed AWS API Gateway endpoint at any time. History is not linked because the backend currently exposes only streak lookup and solve logging.
 
 ### Run Unit & Integration Tests (100% Mocked with Moto)
 

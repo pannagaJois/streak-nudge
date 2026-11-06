@@ -12,8 +12,14 @@ const StreakApi = (() => {
   };
 
   function getConfig() {
+    const isLocalServer = typeof window !== "undefined"
+      && ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    const localApiUrl = isLocalServer
+      ? `${window.location.protocol}//${window.location.host}`
+      : null;
+
     return {
-      apiUrl: localStorage.getItem("streaknudge_api_url") || DEFAULT_CONFIG.apiUrl,
+      apiUrl: localStorage.getItem("streaknudge_api_url") || localApiUrl || DEFAULT_CONFIG.apiUrl,
       apiKey: localStorage.getItem("streaknudge_api_key") || DEFAULT_CONFIG.apiKey,
       user: localStorage.getItem("streaknudge_user") || DEFAULT_CONFIG.user,
       email: localStorage.getItem("streaknudge_email") || DEFAULT_CONFIG.email,
@@ -317,6 +323,20 @@ const StreakApi = (() => {
     }, 500);
   }
 
+  function removeUnsupportedDesktopLinks() {
+    if (!document.querySelector('meta[name="shell-type"][content="web_dashboard"]')) return;
+
+    document.querySelectorAll('a[href*="streaknudge_history"]').forEach((link) => {
+      link.remove();
+    });
+
+    document.querySelectorAll("span").forEach((element) => {
+      if (element.textContent.trim() === "Shield History") {
+        element.remove();
+      }
+    });
+  }
+
   return {
     getConfig,
     setConfig,
@@ -331,6 +351,7 @@ const StreakApi = (() => {
 // Auto-mount settings modal on all pages
 if (typeof document !== "undefined") {
   document.addEventListener("DOMContentLoaded", () => {
+    removeUnsupportedDesktopLinks();
     StreakApi.mountSettingsModal();
   });
 }
